@@ -3,6 +3,8 @@
 # Then, the program processes a tweet text file.
 
 from happy_histogram import drawSimpleHistogram  # importing the function used to display smiley faces in the results at end of program
+import requests
+import time
 
 try:
     keywordsFile = input("What is the name of the keywords file?")
@@ -93,26 +95,39 @@ try:
     MountainTweets = 0
     PacificTweets = 0
     for tweet in listOfTweets:
+        time.sleep(0.8)
         tweet = tweet.split()  # for each line which is a tweet in the list, it is split with the delimiter being the space
         # the the non-numerical characters attached the longitude and latitude are striped and tested to determine if it belongs in one of the timezones
-        if 24.660845 <= float(tweet[0].strip("[ ,")) <= 49.189787 and -87.518395 < float(tweet[1].strip("] ,")) <= -67.444574:
+        lat = (tweet[0].strip("[ ,"))
+        print("Latitude: "+ lat)
+        lng = (tweet[1].strip("] ,"))
+        print("Longitude: "+ lng)
+        url = "http://api.timezonedb.com/v2/get-time-zone?key=IV4FMOJBP3GD&format=json&by=position" + "&lat=" + lat + "&lng=" + lng
+        print(url)
+        resp = requests.get(url)
+        print(resp)
+        dct = resp.json()
+        print(dct)
+        zone = dct["abbreviation"]
+        print(zone)
+        ID = zone[0]
+        print(ID)
+
+        if ID == "E":
             tweetInfo = calc()  # stores the list returned from the calc function
             EasternTotal = EasternTotal + tweetInfo[
                 0]  # The total score of the region is the current score plus the score from the tweet
             EasternTweets = EasternTweets + tweetInfo[
                 1]  # The total tweets counted in the region is the current tweet count plus count of the tweet (1 if counted, 0 if not)
-        elif 24.660845 <= float(tweet[0].strip("[ ,")) <= 49.189787 and -101.998892 < float(
-                tweet[1].strip("] ,")) <= -87.518395:
+        elif ID == "C":
             tweetInfo = calc()
             CentralTotal = CentralTotal + tweetInfo[0]
             CentralTweets = CentralTweets + tweetInfo[1]
-        elif 24.660845 <= float(tweet[0].strip("[ ,")) <= 49.189787 and -115.236428 < float(
-                tweet[1].strip("] ,")) <= -101.998892:
+        elif ID == "M":
             tweetInfo = calc()
             MountainTotal = MountainTotal + tweetInfo[0]
             MountainTweets = MountainTweets + tweetInfo[1]
-        elif 24.660845 <= float(tweet[0].strip("[ ,")) <= 49.189787 and -125.242264 <= float(
-                tweet[1].strip("] ,")) <= -115.236428:
+        elif ID == "P":
             tweetInfo = calc()
             PacificTotal = PacificTotal + tweetInfo[0]
             PacificTweets = PacificTweets + tweetInfo[1]
