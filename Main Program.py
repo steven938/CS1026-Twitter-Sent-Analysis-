@@ -1,4 +1,4 @@
-# Assignment 3 - Tweet sentiment analysis by Steven Chen
+# Tweet sentiment analysis by Steven Chen
 # This program first processes a keywords text file by sorting the keywords into list based on their happiness score.
 # Then, the program processes a tweet text file.
 
