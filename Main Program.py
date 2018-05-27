@@ -99,19 +99,13 @@ try:
         tweet = tweet.split()  # for each line which is a tweet in the list, it is split with the delimiter being the space
         # the the non-numerical characters attached the longitude and latitude are striped and tested to determine if it belongs in one of the timezones
         lat = (tweet[0].strip("[ ,"))
-        print("Latitude: "+ lat)
         lng = (tweet[1].strip("] ,"))
-        print("Longitude: "+ lng)
         url = "http://api.timezonedb.com/v2/get-time-zone?key=IV4FMOJBP3GD&format=json&by=position" + "&lat=" + lat + "&lng=" + lng
-        print(url)
         resp = requests.get(url)
-        print(resp)
         dct = resp.json()
-        print(dct)
         zone = dct["abbreviation"]
-        print(zone)
         ID = zone[0]
-        print(ID)
+
 
         if ID == "E":
             tweetInfo = calc()  # stores the list returned from the calc function
